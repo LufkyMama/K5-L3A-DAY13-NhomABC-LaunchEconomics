@@ -2,19 +2,18 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm:
-- Lớp: L3A hoặc L3B
-- Repo nhóm: `K5-L3A-DAY13-TenNhom-LaunchEconomics` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt:
+- Tên nhóm: NhomABC
+- Lớp: L3A
+- Repo nhóm: `K5-L3A-DAY13-NhomABC-LaunchEconomics`
+- URL repo, nhánh nộp, commit chốt: https://github.com/LufkyMama/K5-L3A-DAY13-NhomABC-LaunchEconomics
 
 ## Thành viên
 
 | STT | Họ tên | MSSV | Email | GitHub | Vai trò |
 | --: | ------ | ---- | ----- | ------ | ------- |
-|   1 |        |      |       |        |         |
-|   2 |        |      |       |        |         |
-|   3 |        |      |       |        |         |
-|   4 |        |      |       |        |         |
+|   1 | Vũ Nguyễn Hoàng Minh | 2A202603541 | minhhoang6724@gmail.com | LufkyMama |  Kiểm số và pilot |
+|   2 | Bùi Thế Anh | 2A202603546 | theanh7888189@gmail.com | theahASR | Code và chi phí |
+|   3 | Nguyễn Tuấn Dũng | 2A202603559 | dungnguyentuan080@gmail.com | Ntd1411 | Hồ sơ và điều phối |
 
 Bốn vai của lab:
 
