@@ -1,0 +1,6 @@
+CP5 - Hồ sơ Gate 2a: chỉ số, event, rủi ro kinh tế
+Người thực hiện: Bùi Thế Anh (2A202603546)
+
+- Hoàn tất report/team/chi_so.md: 3 chỉ số tính thử (chính 82,83%, dùng 27,12%, an toàn 4,25%), 2 chỉ số bổ sung (giữ gợi ý 72,88%; sai tiền qua kiểm tra mẫu), 10 event có trace_id, 3 rủi ro kinh tế lấy số từ CP2.
+- Điền mục 4 và đề xuất Go có điều kiện trong report/team/ho_so_launch_v0.md; nêu các con số bất lợi: xem lại 100% 11.743 đ = 0,98x, làm lại +51,8%, power 0,64.
+- Kiểm tra lại: pilot_plan.yaml đọc được, 4 luật dừng, n_per_arm = 859; không còn dấu ? ngoài chú thích.
