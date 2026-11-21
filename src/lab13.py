@@ -113,6 +113,69 @@ if __name__ == '__main__':
               f'co_dinh={co_dinh:7,.0f} cps={cps:8,.0f} so_voi_12000={cps / BASELINE:5.2f}x')
 
     # TODO CP2 · Nhiệm vụ B: đổi từng yếu tố, ghi vào bảng độ nhạy.
+    print('\nB1 · Đổi từng yếu tố')
+    goc = ket_qua['cps']
+    kich_ban = {
+        'Giá token gấp đôi':      dict(gia_vao=52, gia_ra=260),
+        'Giá token giảm một nửa': dict(gia_vao=13, gia_ra=65),
+        'Xem lại gấp đôi':        dict(he_so_xem_lai=2),
+        'Xem lại giảm một nửa':   dict(he_so_xem_lai=0.5),
+        'Làm lại gấp đôi':        dict(he_so_lam_lai=2),
+        'Làm lại giảm một nửa':   dict(he_so_lam_lai=0.5),
+        'Lương tăng 25%':         dict(luong_phut=2500),
+        'Tối đa 2 lần chạy':      dict(max_lan_chay=2),
+        'Chỉ 1 lần chạy':         dict(max_lan_chay=1),
+    }
+    print(f'{"Gốc (A2)":28s} {goc:10,.0f}')
+    thay_doi = {}
+    for ten, kw in kich_ban.items():
+        cps = mo_hinh(runs, reqs, **kw)['cps']
+        thay_doi[ten] = (cps / goc - 1) * 100
+        print(f'{ten:28s} {cps:10,.0f} {thay_doi[ten]:+7.1f}%')
+
+    print('\nB2 · Đổi một cặp và xếp hạng')
+    cap = mo_hinh(runs, reqs, gia_vao=52, gia_ra=260, he_so_xem_lai=2)['cps']
+    print(f'{"Giá token gấp đôi + xem lại gấp đôi":40s} {cap:10,.0f} {(cap / goc - 1) * 100:+7.1f}%')
+    xep_hang = {
+        'Số ca làm lại': thay_doi['Làm lại gấp đôi'],
+        'Tỉ lệ xem lại': thay_doi['Xem lại gấp đôi'],
+        'Lương nhân viên': thay_doi['Lương tăng 25%'],
+    }
+    for hang, (ten, phan_tram) in enumerate(sorted(xep_hang.items(), key=lambda x: -x[1]), 1):
+        print(f'  {hang}. {ten:20s} {phan_tram:+.1f}%')
+
+    print('\nB3 · Giới hạn chạy lại')
+    print(f'{"Giới hạn":10s} {"Tổng trợ lý":>12s} {"Không thành công":>17s} {"Cả hệ thống":>12s} {"CPS":>9s}')
+    for k in [1, 2, 3]:
+        kq = mo_hinh(runs, reqs, max_lan_chay=k)
+        khong_thanh_cong = len(reqs) - kq['thanh_cong']
+        ca_he_thong = kq['tong'] + BASELINE * khong_thanh_cong
+        print(f'{k} lần     {kq["tong"]:12,.0f} {khong_thanh_cong:17d} '
+              f'{ca_he_thong:12,.0f} {kq["cps"]:9,.0f}')
+
+    print('\nB4 · Nếu phải xem lại tất cả (noi_dia + hang_nang)')
+    pv = reqs[reqs['loai'].isin(['noi_dia', 'hang_nang'])]
+    kq_pv = mo_hinh(runs, pv)
+    runs_pv = runs[runs['request_id'].isin(pv['request_id'])]
+    so_co_ok = runs_pv.loc[runs_pv['status'] == 'ok', 'request_id'].nunique()
+    so_lam_lai = int((pv['ket_qua'] == 'lam_lai').sum())
+    token_tool = kq_pv['token'] + kq_pv['tool']
+    xem_lai_100 = so_co_ok * 5 * LUONG_PHUT
+    lam_lai_9 = so_lam_lai * 9 * LUONG_PHUT
+    tong_100 = token_tool + xem_lai_100 + lam_lai_9
+    cps_100 = tong_100 / kq_pv['thanh_cong']
+    phut_lam_lai_tb = reqs.loc[reqs['ket_qua'] == 'lam_lai', 'phut_lam_lai_simulated'].mean()
+    lam_lai_tb = so_lam_lai * phut_lam_lai_tb * LUONG_PHUT
+    tong_tb = token_tool + xem_lai_100 + lam_lai_tb
+    cps_tb = tong_tb / kq_pv['thanh_cong']
+    hoa_von_9 = (BASELINE * kq_pv['thanh_cong'] - token_tool - lam_lai_9) / (so_co_ok * LUONG_PHUT)
+    hoa_von_tb = (BASELINE * kq_pv['thanh_cong'] - token_tool - lam_lai_tb) / (so_co_ok * LUONG_PHUT)
+    print(f'Xem lại 100%, làm lại 9 phút: {cps_100:,.0f} đ = {cps_100 / BASELINE:.2f}x của 12.000 đ')
+    print(f'Xem lại 100%, làm lại {phut_lam_lai_tb:.1f} phút: {cps_tb:,.0f} đ = {cps_tb / BASELINE:.2f}x của 12.000 đ')
+    print(f'Hoà vốn: xem lại <= {hoa_von_9:.1f} phút (làm lại 9 phút) hoặc <= {hoa_von_tb:.1f} phút (làm lại {phut_lam_lai_tb:.1f} phút)')
+    print(f'Chi tiết: {so_co_ok} yêu cầu có lần ok × 5 phút = {xem_lai_100:,.0f} đ; '
+          f'{so_lam_lai} ca làm lại; token+tool = {token_tool:,.0f} đ; tổng = {tong_100:,.0f} đ')
+
     # TODO CP4 · Nhiệm vụ D: cỡ mẫu.
     #   from statsmodels.stats.proportion import proportion_effectsize
     #   from statsmodels.stats.power import NormalIndPower
