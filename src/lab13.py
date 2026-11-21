@@ -4,6 +4,8 @@ Không cần khoá API. Điền các chỗ ghi VIẾT Ở ĐÂY (đánh dấu TO
 Bản gốc chưa sửa nằm ở lab13_starter.py.
 """
 import math
+from statistics import NormalDist
+
 import pandas as pd
 
 # Bảng giá GIẢ ĐỊNH của lab (không phải giá thật của nhà cung cấp nào)
@@ -70,6 +72,17 @@ def mo_hinh(runs, reqs, gia_vao=26, gia_ra=130, gia_tool=15, luong_phut=2000,
                 thanh_cong=thanh_cong, cps=tong / thanh_cong,
                 hoa_don_moi_yc=(tien_token.sum() + tien_tool.sum()) / len(reqs),
                 so_yeu_cau=len(reqs))
+
+
+# ---------- Nhiệm vụ D · Cỡ mẫu cho hai tỉ lệ ----------
+def co_mau(p1, p2, alpha=0.05, power=0.8):
+    """Cỡ mẫu mỗi nhóm khi so sánh hai tỉ lệ (công thức trong docs/du_lieu_va_cong_thuc.md)."""
+    za = NormalDist().inv_cdf(1 - alpha / 2)
+    zb = NormalDist().inv_cdf(power)
+    pb = (p1 + p2) / 2
+    return math.ceil((za * math.sqrt(2 * pb * (1 - pb))
+                      + zb * math.sqrt(p1 * (1 - p1) + p2 * (1 - p2))) ** 2
+                     / (p2 - p1) ** 2)
 
 
 if __name__ == '__main__':
@@ -176,6 +189,43 @@ if __name__ == '__main__':
     print(f'Chi tiết: {so_co_ok} yêu cầu có lần ok × 5 phút = {xem_lai_100:,.0f} đ; '
           f'{so_lam_lai} ca làm lại; token+tool = {token_tool:,.0f} đ; tổng = {tong_100:,.0f} đ')
 
-    # TODO CP4 · Nhiệm vụ D: cỡ mẫu.
-    #   from statsmodels.stats.proportion import proportion_effectsize
-    #   from statsmodels.stats.power import NormalIndPower
+    # TODO CP4 · Nhiệm vụ D: cỡ mẫu và tỉ lệ mở lại.
+    from statsmodels.stats.proportion import proportion_effectsize
+    from statsmodels.stats.power import NormalIndPower
+
+    print('\nD1 · Cỡ mẫu (baseline 0,70; mục tiêu +5 điểm; alpha 0,05; power 0,8; ICC 0,02)')
+    alpha, power, icc = 0.05, 0.8, 0.02
+    n_a = co_mau(0.70, 0.75, alpha, power)
+    n_a_sm = NormalIndPower().solve_power(
+        effect_size=proportion_effectsize(0.70, 0.75), alpha=alpha, power=power, ratio=1.0)
+    print(f'a) Chia theo yêu cầu: {n_a:,} yêu cầu mỗi nhóm '
+          f'(statsmodels: {n_a_sm:,.1f} → {math.ceil(n_a_sm):,})')
+
+    m_b = 75
+    de_b = 1 + (m_b - 1) * icc
+    n_b = math.ceil(n_a * de_b)
+    nguoi_b = math.ceil(n_b / m_b)
+    print(f'b) m={m_b}: DE={de_b:.2f}; {n_b:,} yêu cầu mỗi nhóm; {nguoi_b} người mỗi nhóm; '
+          f'tổng {2 * nguoi_b} người (có 40) → {"đủ" if 2 * nguoi_b <= 40 else "không đủ"} người')
+
+    n_c = 20 / icc
+    print(f'c) 20 người mỗi nhóm: tối đa {n_c:,.0f} yêu cầu hiệu dụng < {n_a:,} → không đạt')
+
+    n_d = 6 / icc
+    print(f'd) 6 depot mỗi nhóm: tối đa {n_d:,.0f} yêu cầu hiệu dụng')
+
+    n_e = co_mau(0.70, 0.76, alpha, power)
+    m_e = math.ceil(n_e * (1 - icc) / (20 - n_e * icc))
+    de_e = 1 + (m_e - 1) * icc
+    print(f'e) Mức chênh 6 điểm: {n_e:,} yêu cầu mỗi nhóm; 20 người mỗi nhóm → '
+          f'm ≥ {m_e} yêu cầu/người; DE={de_e:.2f}; hiệu dụng={20 * m_e / de_e:,.1f}')
+
+    power_5 = NormalIndPower().power(
+        effect_size=proportion_effectsize(0.70, 0.75), nobs1=n_e, alpha=alpha, ratio=1.0)
+    print(f'Kiểm tra chéo: nếu tác động thật chỉ là 5 điểm, power với n={n_e} là {power_5:.2f}')
+
+    print('\nD3 · Tỉ lệ mở lại trong 7 ngày hiện tại')
+    for nhan, tap in [('Toàn mẫu', reqs),
+                      ('noi_dia + hang_nang', reqs[reqs['loai'].isin(['noi_dia', 'hang_nang'])])]:
+        so_mo_lai = int((tap['mo_lai_trong_7_ngay'] == 1).sum())
+        print(f'{nhan:22s} {so_mo_lai:4d}/{len(tap):4d} = {tap["mo_lai_trong_7_ngay"].mean():.2%}')
