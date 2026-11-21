@@ -1,0 +1,8 @@
+CP1 - Mô hình chi phí mỗi việc thành công
+Người thực hiện: Bùi Thế Anh (2A202603546)
+
+- Viết A1: so_lan_chay_ky_vong, ti_le_thanh_cong, he_so_chi_phi_moi_viec_thanh_cong; ba phép thử ĐẠT (1,20 / 1,25 / 1,25).
+- Viết A2 mo_hinh: tử số cộng mọi lần chạy kể cả lần lỗi; mẫu số chỉ đếm ket_qua = thanh_cong.
+- A3 tách theo loai và A4 cộng chi phí cố định 40 triệu/tháng cho noi_dia + hang_nang.
+- Điền A1-A4 vào report/team/bang_chi_phi.md.
+- Kết quả: tổng 4.373.585 đ; 978 việc thành công; CPS 4.472 đ = 16,3 lần hoá đơn/yc [simulated]; A4 4.599 đ (0,38x) và 5.784 đ (0,48x).
