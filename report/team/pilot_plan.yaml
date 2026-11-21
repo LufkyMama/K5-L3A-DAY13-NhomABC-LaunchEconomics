@@ -20,7 +20,8 @@
 # Đánh đổi: giữ đối chứng tách theo nhân viên và nâng MDE từ 5 lên 6 điểm phần trăm. Nếu hiệu ứng thật là +5 điểm,
 # power chỉ khoảng 0,64. Với 299 yêu cầu/người, mỗi nhóm cần 5.980 yêu cầu thực, xấp xỉ 859,2 yêu cầu hiệu dụng.
 # Mốc 5.980 dựa trên cụm đều cỡ. Nếu số ca lệch giữa nhân viên, kiểm lại cỡ mẫu hiệu dụng trước khi kết luận.
-# Mở lại trong 7 ngày: 51/1.200 = 4,25% toàn mẫu, 39/982 = 3,97% trong phạm vi. Trần đề xuất 6% và chênh ≥ 2 điểm.
+# Mở lại trong 7 ngày: 51/1.200 = 4,25% toàn mẫu, 39/982 = 3,97% trong phạm vi.
+# Nội địa 26/824 = 3,16%, hàng nặng 13/158 = 8,23%. Trần 6% áp dụng cho phạm vi gộp.
 
 pilot:
   owner: "Giám đốc vận hành LogiX-VN"
@@ -75,13 +76,14 @@ pilot:
       TRONG 3 lần rà hằng ngày liên tiếp trên các ca đã đủ thời gian theo dõi
       THÌ Giám đốc vận hành dừng cấp ca mới trong 30 phút và cho rà nguyên nhân
       KHÔNG THÌ tiếp tục theo dõi và chỉ tăng pha khi có đủ dữ liệu an toàn.
+      Báo thêm tử số và mẫu số theo từng loại và nhóm, đặc biệt hang_nang.
     - >-
       NẾU chi phí vận hành biến đổi mỗi việc trợ lý hoàn thành vượt 8.000 đ, tính từ token,
       tool và phút xem lại, làm lại ghi thực tế TRONG 2 tuần liên tiếp
       THÌ PM trợ lý hoàn phí giữ pha, rà chi phí với Giám đốc vận hành và đề xuất phạm vi noi_dia với tối đa 2 lần chạy
       KHÔNG THÌ giữ phạm vi và chỉ tăng pha khi các tiêu chí còn lại đạt.
     - >-
-      NẾU tỉ lệ gợi ý bị bỏ trên số gợi ý đã có quyết định vượt 40%
+      NẾU tỉ lệ yêu cầu được xem lại có quyết định sửa hoặc bỏ gợi ý vượt 40%
       TRONG 1 tuần THÌ Trưởng nhóm CSKH giữ pha và phỏng vấn 5 nhân viên trong 3 ngày
       KHÔNG THÌ chỉ tiếp tục kế hoạch tăng pha khi đã qua kiểm tra an toàn và chi phí.
   interim_looks: "Trong kỳ chỉ giám sát an toàn, chi phí và mức sử dụng theo luật dừng. Chỉ so hiệu quả chính một lần sau khi khóa dữ liệu."

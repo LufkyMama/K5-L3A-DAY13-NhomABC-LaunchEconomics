@@ -226,6 +226,19 @@ if __name__ == '__main__':
 
     print('\nD3 · Tỉ lệ mở lại trong 7 ngày hiện tại')
     for nhan, tap in [('Toàn mẫu', reqs),
-                      ('noi_dia + hang_nang', reqs[reqs['loai'].isin(['noi_dia', 'hang_nang'])])]:
+                      ('noi_dia + hang_nang', reqs[reqs['loai'].isin(['noi_dia', 'hang_nang'])]),
+                      ('noi_dia', reqs[reqs['loai'] == 'noi_dia']),
+                      ('hang_nang', reqs[reqs['loai'] == 'hang_nang'])]:
         so_mo_lai = int((tap['mo_lai_trong_7_ngay'] == 1).sum())
         print(f'{nhan:22s} {so_mo_lai:4d}/{len(tap):4d} = {tap["mo_lai_trong_7_ngay"].mean():.2%}')
+
+    print('\nE1 · Chỉ số trong đợt chạy thử')
+    da_xem_lai = reqs[reqs['duoc_xem_lai'] == 1]
+    dong_dung_han = (reqs['dong_trong_24h'] == 1) & (reqs['mo_lai_trong_7_ngay'] == 0)
+    sua_hoac_bo = da_xem_lai['quyet_dinh_xem_lai'].isin(['sua', 'bo'])
+    mo_lai = reqs['mo_lai_trong_7_ngay'] == 1
+    for ten_chi_so, ket_qua_thu in [('Đóng trong 24 giờ, không mở lại 7 ngày', dong_dung_han),
+                                    ('Sửa hoặc bỏ gợi ý', sua_hoac_bo),
+                                    ('Giữ nguyên gợi ý', da_xem_lai['quyet_dinh_xem_lai'] == 'giu'),
+                                    ('Mở lại trong 7 ngày', mo_lai)]:
+        print(f'{ten_chi_so}: {ket_qua_thu.sum():,}/{len(ket_qua_thu):,} = {ket_qua_thu.mean():.2%}')
