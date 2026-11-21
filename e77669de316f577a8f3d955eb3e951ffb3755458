@@ -1,0 +1,7 @@
+CP3 - Bảng lỗi và cách khắc phục
+Người thực hiện: Bùi Thế Anh (2A202603546)
+
+- Rà 20 ca lỗi theo 5 loại Google PAIR; giữ nguyên hai bộ nhãn độc lập của Minh và Dũng, đồng thuận 20/20 = 100%.
+- Viết quy tắc phân biệt cho ca dễ lẫn (6, 9, 13, 8, 15, 18, 12).
+- Hoàn thiện bảng khắc phục 5 ca đủ 5 loại (ca 1, 20, 16, 11, 12), mỗi dòng có event/ngưỡng/tần suất và một vai trò phụ trách.
+- Chuẩn bị số cho CP5: 82,83% (994/1.200), 27,12% (48/177), 4,25% (51/1.200).
